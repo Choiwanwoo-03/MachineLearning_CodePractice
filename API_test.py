@@ -14,7 +14,7 @@ print(url)
 print()
 
 try:
-    response = requests.get(url, timeout=30)
+    response = requests.get(url, timeout=60)
     print("상태코드:", response.status_code)
     print("응답 원문:")
     print(response.text[:1000])
