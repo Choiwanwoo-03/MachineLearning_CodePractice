@@ -1,27 +1,24 @@
 import requests
-import json
+from urllib.parse import quote
 
 SERVICE_KEY = "44ee7a331e4637a576a94b65a28033989a585455456d1fbc441b982883fc79fd"
+ENCODED_KEY = quote(SERVICE_KEY, safe='')  # URL 인코딩
+
 BASE_URL    = "https://apis.data.go.kr/B551982/cso_v2/cso_realtime_v2"
 BJDONG_CODE = "4413310300"
 
-# serviceKey는 URL에 직접 붙이기 (인코딩 문제 방지)
-url = f"{BASE_URL}?serviceKey={SERVICE_KEY}"
+url = f"{BASE_URL}?serviceKey={ENCODED_KEY}&bjdongCode={BJDONG_CODE}&type=json&numOfRows=10&pageNo=1"
 
-params = {
-    "bjdongCode": BJDONG_CODE,
-    "type":       "json",
-    "numOfRows":  100,
-    "pageNo":     1,
-}
+print("호출 URL:")
+print(url)
+print()
 
 try:
-    response = requests.get(url, params=params, timeout=30)  # 타임아웃 30초로 증가
+    response = requests.get(url, timeout=30)
     print("상태코드:", response.status_code)
-    print("Content-Type:", response.headers.get("Content-Type"))
-    print("응답 원문 (앞 1000자):")
-    print(response.text[:1000])  # 일단 raw 텍스트로 확인
+    print("응답 원문:")
+    print(response.text[:1000])
 except requests.exceptions.Timeout:
-    print("❌ 타임아웃 - 서버 응답 없음")
+    print("❌ 타임아웃")
 except requests.exceptions.RequestException as e:
-    print(f"❌ 요청 오류: {e}")
+    print(f"❌ 오류: {e}")
