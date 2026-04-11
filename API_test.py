@@ -20,7 +20,7 @@ class CivilServiceAPI:
         default_params.update(params)
 
         try:
-            response = requests.get(full_url, params=default_params, timeout=15)
+            response = requests.get(full_url, params=default_params, timeout=60)
             
             if response.status_code == 200:
                 return response.json()
